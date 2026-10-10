@@ -1,7 +1,7 @@
 let currentPokemonId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-  const MAX_POKEMONS = 151;
+  const MAX_POKEMONS = 1000;
   const pokemonID = new URLSearchParams(window.location.search).get("id");
   const id = parseInt(pokemonID, 10);
 
@@ -46,7 +46,7 @@ async function loadPokemon(id) {
           navigatePokemon(id - 1);
         });
       }
-      if (id !== 151) {
+      if (id !== MAX_POKEMONS) {
         rightArrow.addEventListener("click", () => {
           navigatePokemon(id + 1);
         });
@@ -176,8 +176,12 @@ function displayPokemonDetails(pokemon) {
   ).textContent = `#${String(id).padStart(3, "0")}`;
 
   const imageElement = document.querySelector(".detail-img-wrapper img");
-  imageElement.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`;
-  imageElement.alt = name;
+    imageElement.onerror = () => {
+        imageElement.onerror = null;
+        imageElement.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+    };
+    imageElement.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`;
+    imageElement.alt = name;
 
   const typeWrapper = document.querySelector(".power-wrapper");
   typeWrapper.innerHTML = "";
